@@ -1,0 +1,3 @@
+[D-BUS Service]
+Name=com.uploadedlobster.WebcamAccessMonitor
+Exec=/usr/bin/python /usr/lib/webcam-access-monitor/webcam-access-monitor.py

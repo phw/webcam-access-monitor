@@ -1,1 +1,6 @@
-{"shell-version": ["3.8.4"], "uuid": "webcamstatusindicator@philipp.wolfer.co", "name": "Webcam Status Indicator", "description": "Displays the status of the webcam"}
+{
+    "shell-version": ["3.8.4"],
+    "uuid": "webcam-access-monitor@philipp.wolfer.co",
+    "name": "Webcam Access Monitor",
+    "description": "Displays an icon in the top bar whenever the webcam is in use."
+}

@@ -1,12 +1,40 @@
+/*
+Copyright (c) 2013 Philipp Wolfer <ph.wolfer@gmail.com>
 
-const St = imports.gi.St;
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
+
 const Main = imports.ui.main;
 const PanelMenu = imports.ui.panelMenu;
 const Gio = imports.gi.Gio;
-const GLib = imports.gi.GLib;
 const Lang = imports.lang;
 
 let _indicator;
+
+const WebcamStatusInterface = <interface name="com.uploadedlobster.WebcamAccessMonitor">
+<method name="getDeviceState">
+    <arg type="s" direction="in"/>
+    <arg type="i" direction="out"/>
+</method>
+<method name="getAllDeviceStates">
+    <arg type="a{si}" direction="out"/>
+</method>
+<signal name="stateChanged">
+    <arg type="(si)" direction="out"/>
+</signal>
+</interface>
+const WebcamStatusDbusProxy = Gio.DBusProxy.makeProxyWrapper(WebcamStatusInterface);
 
 function CameraStatusButton() {
     this._init();
@@ -16,69 +44,48 @@ CameraStatusButton.prototype = {
     __proto__: PanelMenu.SystemStatusButton.prototype,
 
     _init: function() {
-        PanelMenu.SystemStatusButton.prototype._init.call(this, 'camera-web-symbolic');
+        PanelMenu.SystemStatusButton.prototype._init.call(
+	    this, 'camera-web-symbolic');
 
-        this.camera_device = '/dev/video0';
-        this.camera_file = Gio.file_new_for_uri('file://' + this.camera_device);
-	this.camera_is_on = false;
+        this.camera_is_on = false;
 
-        this._onStatusChange();
-        this._setupWatch();
+	this._proxy = new WebcamStatusDbusProxy(
+	    Gio.DBus.session,
+	    'com.uploadedlobster.WebcamAccessMonitor',
+	    '/com/uploadedlobster/WebcamAccessMonitor');
+
+	this._setupWatch();
+	this._checkCameraIsActive();
     },
 
     _setupWatch: function() {
-	// Unfortunately FileMonitor does not monitor the inotify
-	// IN_OPEN and IN_CLOSE_NOWRITE events, so we miss some events.
-	// As there is no direct access to inotify there probably
-	// needs to be some kind of daemon we communicate to via DBUS.
-	// Cameramonitor could be extended, see
-	// https://code.launchpad.net/~cameramonitor-team/cameramonitor/
-	
-        this.monitor = this.camera_file.monitor_file(
-	    Gio.FileMonitorFlags.NONE, null);
-        this.monitor.connect('changed', Lang.bind(this, this._onStatusChange));
+	this._changedSignalId = this._proxy.connectSignal(
+	    'stateChanged', Lang.bind(this, this._onStateChange));
     },
 
-    _onStatusChange: function() {
-	log('DEBUG: Camera device ' + this.camera_device + ' changed.');
-	this._checkCameraIsActive(Lang.bind(this, this._checkCameraCallback));
+    _onStateChange: function(emitter, senderName, parameters) {
+	// parameters is a tuple of type (si), e.g. ('/dev/video0', 1)
+	var device = parameters[0][0]
+	var state = parameters[0][1];
+	log('DEBUG: Camera device ' + device + ' changed state ' + state);
+	this._updateCameraStatus(state == 1);
     },
 
-    _checkCameraIsActive: function(callback) {
-	try {
-	    var info = this.camera_file.query_info(
-		'access::*',
-		Gio.FileQueryInfoFlags.NONE,
-		null);
+    _checkCameraIsActive: function() {
+	this._proxy.getAllDeviceStatesRemote(
+	    Lang.bind(this, function(result, excp) {
+		[result] = result
+		var status = true;
+		for (var device in result) {
+		    log('DEBUG: Camera device ' + device + ' state ' + result[device]);
+		    status &= result[device] == 1;
+		}
 
-	    if (!info.get_attribute_boolean('access::can-read')) {
-		log('WARNING: No read access to ' + this.camera_device);
-		callback(false);
-		return;
-	    }
-	}
-	catch (e) {
-	    log('WARNING: Cannot access device ' + this.camera_device);
-	    log(e);
-	    callback(false);
-	    return;
-	}
-
-	let [success, pid] = GLib.spawn_async(
-	    null,
-	    ['fuser', '-s', this.camera_device],
-	    null,
-	    GLib.SpawnFlags.SEARCH_PATH | GLib.SpawnFlags.DO_NOT_REAP_CHILD,
-	    null);
-
-	GLib.child_watch_add(GLib.PRIORITY_DEFAULT, pid, function(pid, status) {
-            GLib.spawn_close_pid(pid);
-            log("DEBUG: Camera status=" + status);
-	    callback(status == 0);
- 	});
+		this._updateCameraStatus(status);
+	    }));
     },
 
-    _checkCameraCallback: function(status) {
+    _updateCameraStatus: function(status) {
 	if (this.camera_is_on != status) {
 	    this.camera_is_on = status;
 
