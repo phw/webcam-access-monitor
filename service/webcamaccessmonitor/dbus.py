@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+#
 # Copyright (c) 2013 Philipp Wolfer <ph.wolfer@gmail.com>
 #
 # This program is free software: you can redistribute it and/or modify
@@ -14,6 +16,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import dbus, dbus.service
+from webcamaccessmonitor import STATE_UNKNOWN
 
 BUS_NAME = "com.uploadedlobster.WebcamAccessMonitor"
 INTERFACE_NAME = "com.uploadedlobster.WebcamAccessMonitor"
@@ -28,7 +31,7 @@ class WebcamStatusService(dbus.service.Object):
     @dbus.service.method(dbus_interface=INTERFACE_NAME,
                          in_signature='s', out_signature='i')
     def getDeviceState(self, device):
-        return self.device_states.get(device, -1)
+        return self.device_states.get(device, STATE_UNKNOWN)
 
 
     @dbus.service.method(dbus_interface=INTERFACE_NAME,

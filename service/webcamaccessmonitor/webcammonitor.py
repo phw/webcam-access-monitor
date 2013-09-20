@@ -17,12 +17,13 @@ import os
 import glob
 import subprocess
 import pyinotify
+from webcamaccessmonitor import STATE_UNKNOWN, STATE_OFF, STATE_ON
 
 def _check_initial_camera_state(device):
     print("DEBUG: Checking device %s" % device)
     if not os.path.exists(device) \
        or not os.access(device, os.R_OK):
-        return -1 # unknown state
+        return STATE_UNKNOWN
         
     process = subprocess.Popen(["fuser", device],
                                stdout=subprocess.PIPE)
@@ -30,9 +31,9 @@ def _check_initial_camera_state(device):
     process.terminate()
     
     if result:
-        return 1
+        return STATE_ON
     else:
-        return 0
+        return STATE_OFF
 
 
 class WebcamMonitor:
@@ -88,11 +89,11 @@ class WebcamProcessEvent(pyinotify.ProcessEvent):
         print("DEBUG: Event %s on device %s" % (event.maskname, device))
         state = None
         if event.mask & pyinotify.IN_OPEN:
-            state = 1
+            state = STATE_ON
         elif event.mask & pyinotify.IN_CLOSE_WRITE \
              or event.mask & pyinotify.IN_CLOSE_NOWRITE \
              or event.mask & pyinotify.IN_DELETE_SELF:
-            state = 0
+            state = STATE_OFF
         elif event.mask & pyinotify.IN_ATTRIB:
             # The permissions might have changed,
             # check the current state again

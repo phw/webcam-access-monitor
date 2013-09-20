@@ -1,4 +1,3 @@
-#!/bin/env python
 # -*- coding: utf-8 -*-
 #
 # Copyright (c) 2013 Philipp Wolfer <ph.wolfer@gmail.com>
@@ -16,20 +15,8 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-if __name__ == '__main__':
-    import dbus
-    from gi.repository import GObject
-    from dbus.mainloop.glib import DBusGMainLoop
-    from webcamaccessmonitor.dbus import WebcamStatusService, BUS_NAME, OBJECT_PATH
-    from webcamaccessmonitor.webcammonitor import WebcamMonitor
-    
-    loop = GObject.MainLoop()
-    GObject.threads_init()
-    DBusGMainLoop(set_as_default=True)
-    
-    bus = dbus.SessionBus()
-    name = dbus.service.BusName(BUS_NAME, bus)
-    dbus_service = WebcamStatusService(bus, OBJECT_PATH)
-    with WebcamMonitor("/dev/video*", dbus_service) as webcam_monitor:
-        loop.run()
- 
+VERSION = (0, 1, 0)
+
+STATE_UNKNOWN = -1
+STATE_OFF = 0
+STATE_ON = 1
