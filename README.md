@@ -1,4 +1,4 @@
-webcam Access Monitor
+Webcam Access Monitor
 =====================
 
 The Webcam Access Monitor helps you to see whether your webcam is currently
