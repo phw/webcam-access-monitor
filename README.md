@@ -13,9 +13,18 @@ Using a D-Bus service makes it easy to extend this application to support
 more desktop environments, such as the Unity desktop using an indicator applet
 or good old notification applets.
 
+Requirements
+------------
+
+* Python 3
+* dbus-python
+* pyinotify
+* PyGObject
+* PSmisc
+
 Installation and usage
 ----------------------
 For now there is no install script and you have to copy the individual
 components into place manually. Have a look at the Arch Linux
-(AUR package)[https://aur.archlinux.org/packages/we/webcam-access-monitor/PKGBUILD]
+[AUR package](https://aur.archlinux.org/packages/we/webcam-access-monitor/PKGBUILD)
 for an example. I will add a proper install script and better instructions soon.
