@@ -1,5 +1,5 @@
 {
-    "shell-version": ["3.8.0"],
+    "shell-version": ["3.8"],
     "uuid": "webcam-access-monitor@philipp.wolfer.co",
     "name": "Webcam Access Monitor",
     "description": "Displays an icon in the top bar whenever the webcam is in use.",
