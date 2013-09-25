@@ -19,6 +19,7 @@ const Main = imports.ui.main;
 const PanelMenu = imports.ui.panelMenu;
 const Gio = imports.gi.Gio;
 const Lang = imports.lang;
+const St = imports.gi.St;
 
 let _indicator;
 
@@ -36,16 +37,16 @@ const WebcamStatusInterface = <interface name="com.uploadedlobster.WebcamAccessM
 </interface>
 const WebcamStatusDbusProxy = Gio.DBusProxy.makeProxyWrapper(WebcamStatusInterface);
 
-function CameraStatusButton() {
-    this._init();
-}
-
-CameraStatusButton.prototype = {
-    __proto__: PanelMenu.SystemStatusButton.prototype,
+const CameraStatusButton = new Lang.Class({
+    Name: 'WebcamAccessMonitor.CameraStatusButton',
+    Extends: PanelMenu.Button,
 
     _init: function() {
-        PanelMenu.SystemStatusButton.prototype._init.call(
-	    this, 'camera-web-symbolic');
+	this.parent(0.0, _("Webcam status"));
+	
+	let icon = new St.Icon({ icon_name: 'camera-web-symbolic',
+                                 style_class: 'system-status-icon' });
+        this.actor.add_child(icon);
 
         this.camera_is_on = false;
 
@@ -65,8 +66,8 @@ CameraStatusButton.prototype = {
 
     _onStateChange: function(emitter, senderName, parameters) {
 	// parameters is a tuple of type (si), e.g. ('/dev/video0', 1)
-	var device = parameters[0][0]
-	var state = parameters[0][1];
+	let device = parameters[0][0]
+	let state = parameters[0][1];
 	log('DEBUG: Camera device ' + device + ' changed state ' + state);
 	this._updateCameraStatus(state == 1);
     },
@@ -99,7 +100,7 @@ CameraStatusButton.prototype = {
 	
 	this.actor.visible = this.camera_is_on;
     },
-};
+});
 
 function init() {
 }
