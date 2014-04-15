@@ -23,18 +23,20 @@ const St = imports.gi.St;
 
 let _indicator;
 
-const WebcamStatusInterface = <interface name="com.uploadedlobster.WebcamAccessMonitor">
-<method name="getDeviceState">
-    <arg type="s" direction="in"/>
-    <arg type="i" direction="out"/>
-</method>
-<method name="getAllDeviceStates">
-    <arg type="a{si}" direction="out"/>
-</method>
-<signal name="stateChanged">
-    <arg type="(si)" direction="out"/>
-</signal>
-</interface>
+const WebcamStatusInterface = '<node>\
+    <interface name="com.uploadedlobster.WebcamAccessMonitor">\
+        <method name="getDeviceState">\
+            <arg type="s" direction="in"/>\
+            <arg type="i" direction="out"/>\
+        </method>\
+        <method name="getAllDeviceStates">\
+            <arg type="a{si}" direction="out"/>\
+        </method>\
+        <signal name="stateChanged">\
+            <arg type="(si)" direction="out"/>\
+        </signal>\
+        </interface>\
+</node>';
 const WebcamStatusDbusProxy = Gio.DBusProxy.makeProxyWrapper(WebcamStatusInterface);
 
 const CameraStatusButton = new Lang.Class({
