@@ -1,5 +1,6 @@
 Webcam Access Monitor
 =====================
+[![Code Climate](https://codeclimate.com/github/phw/webcam-access-monitor/badges/gpa.svg)](https://codeclimate.com/github/phw/webcam-access-monitor)
 
 The Webcam Access Monitor helps you to see whether your webcam is currently
 active or not. This is usefull if your webcam has no status LED and you want
