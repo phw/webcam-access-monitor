@@ -1,0 +1,10 @@
+{
+    "strict": "global",
+    "esversion": 6,
+    "globals": {
+        "_": false,
+        "imports": false,
+        "log": false
+    },
+    "multistr": true
+}

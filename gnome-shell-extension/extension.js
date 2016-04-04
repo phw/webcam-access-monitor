@@ -15,6 +15,8 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+'use strict';
+
 const Main = imports.ui.main;
 const PanelMenu = imports.ui.panelMenu;
 const Gio = imports.gi.Gio;
@@ -45,70 +47,71 @@ const CameraStatusButton = new Lang.Class({
 
     _init: function() {
         this.parent(0.0, _("Webcam status"));
-	    
-	    let icon = new St.Icon({ icon_name: 'camera-web-symbolic',
-                                 style_class: 'system-status-icon' });
+
+        let icon = new St.Icon({
+            icon_name: 'camera-web-symbolic',
+            style_class: 'system-status-icon'
+        });
         this.actor.add_child(icon);
 
         this.camera_is_on = false;
 
-	    this._proxy = new WebcamStatusDbusProxy(
-	        Gio.DBus.session,
-	        'com.uploadedlobster.WebcamAccessMonitor',
-	        '/com/uploadedlobster/WebcamAccessMonitor');
+        this._proxy = new WebcamStatusDbusProxy(
+            Gio.DBus.session,
+            'com.uploadedlobster.WebcamAccessMonitor',
+            '/com/uploadedlobster/WebcamAccessMonitor');
 
-	    this._setupWatch();
-	    this._checkCameraIsActive();
+        this._setupWatch();
+        this._checkCameraIsActive();
     },
 
     _setupWatch: function() {
-	    this._changedSignalId = this._proxy.connectSignal(
-	        'stateChanged', Lang.bind(this, this._onStateChange));
+        this._changedSignalId = this._proxy.connectSignal(
+            'stateChanged', Lang.bind(this, this._onStateChange));
     },
 
     _onStateChange: function(emitter, senderName, parameters) {
-	    // parameters is a tuple of type (si), e.g. ('/dev/video0', 1)
-	    let device = parameters[0][0]
-	    let state = parameters[0][1];
-	    log('DEBUG: Camera device ' + device + ' changed state ' + state);
-	    this._updateCameraStatus(state == 1);
+        // parameters is a tuple of type (si), e.g. ('/dev/video0', 1)
+        let device = parameters[0][0];
+        let state = parameters[0][1];
+        log('DEBUG: Camera device ' + device + ' changed state ' + state);
+        this._updateCameraStatus(state == 1);
     },
 
     _checkCameraIsActive: function() {
-	    this._proxy.getAllDeviceStatesRemote(
-	        Lang.bind(this, function(result, excp) {
-		        [result] = result
-		        var status = true;
-		        for (var device in result) {
-		            log('DEBUG: Camera device ' + device + ' state ' + result[device]);
-		            status &= result[device] == 1;
-		        }
+        this._proxy.getAllDeviceStatesRemote(
+            Lang.bind(this, function(result, excp) {
+                [result] = result;
+                var status = true;
+                for (var device in result) {
+                    log('DEBUG: Camera device ' + device + ' state ' + result[device]);
+                    status &= result[device] == 1;
+                }
 
-		        this._updateCameraStatus(status);
-	        }));
+                this._updateCameraStatus(status);
+            }));
     },
 
     _updateCameraStatus: function(status) {
-	    if (this.camera_is_on != status) {
-	        this.camera_is_on = status;
+        if (this.camera_is_on != status) {
+            this.camera_is_on = status;
 
-	        // if (this.camera_is_on) {
-	        // 	   Main.notify("Webcam activated");
-	        // }
+            // if (this.camera_is_on) {
+            // 	   Main.notify("Webcam activated");
+            // }
             // else {
             //     Main.notify("Webcam deactivated");
             // }
         }
-        
+
         this.actor.visible = this.camera_is_on;
     },
 });
 
-function init() {
-}
+function init() {}
 
 function enable() {
-    _indicator = new CameraStatusButton;
+    _indicator = new CameraStatusButton();
     Main.panel.addToStatusArea('camera_button', _indicator);
 }
 
