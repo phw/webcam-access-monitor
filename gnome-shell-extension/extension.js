@@ -1,5 +1,5 @@
 /*
-Copyright (c) 2013 Philipp Wolfer <ph.wolfer@gmail.com>
+Copyright (c) 2013-2016 Philipp Wolfer <ph.wolfer@gmail.com>
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -53,6 +53,7 @@ const CameraStatusButton = new Lang.Class({
             style_class: 'system-status-icon'
         });
         this.actor.add_child(icon);
+        this.actor.add_style_class_name('webcam-access-monitor');
 
         this.camera_is_on = false;
 
