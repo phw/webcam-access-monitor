@@ -27,5 +27,5 @@ Installation and usage
 ----------------------
 For now there is no install script and you have to copy the individual
 components into place manually. Have a look at the Arch Linux
-[AUR package](https://aur.archlinux.org/packages/we/webcam-access-monitor/PKGBUILD)
-for an example. I will add a proper install script and better instructions soon.
+[AUR package](https://aur.archlinux.org/packages/webcam-access-monitor/) [PKGBUILD](https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=webcam-access-monitor)
+for an example. I will eventually add a proper install script and better instructions.
