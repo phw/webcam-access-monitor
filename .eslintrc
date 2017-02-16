@@ -1,0 +1,16 @@
+{
+  "extends": "standard",
+  "globals": {
+    "_": false,
+    "imports": false,
+    "log": false
+  },
+  "rules": {
+    "no-multi-str": "off",
+    "no-unused-vars": ["error", {
+      "vars": "local",
+      "varsIgnorePattern": "(init|enable|disable)",
+      "args": "none"
+    }]
+  }
+}
