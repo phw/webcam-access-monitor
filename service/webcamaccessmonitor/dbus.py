@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-# Copyright (c) 2013 Philipp Wolfer <ph.wolfer@gmail.com>
+# Copyright (c) 2013, 2017 Philipp Wolfer <ph.wolfer@gmail.com>
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -15,30 +15,30 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-import dbus, dbus.service
+import dbus
+import dbus.service
 from webcamaccessmonitor import STATE_UNKNOWN
 
 BUS_NAME = "com.uploadedlobster.WebcamAccessMonitor"
 INTERFACE_NAME = "com.uploadedlobster.WebcamAccessMonitor"
 OBJECT_PATH = "/com/uploadedlobster/WebcamAccessMonitor"
 
+
 class WebcamStatusService(dbus.service.Object):
+
     def __init__(self, bus, object_path):
         self.device_states = {}
         dbus.service.Object.__init__(self, bus, object_path)
-
 
     @dbus.service.method(dbus_interface=INTERFACE_NAME,
                          in_signature='s', out_signature='i')
     def getDeviceState(self, device):
         return self.device_states.get(device, STATE_UNKNOWN)
 
-
     @dbus.service.method(dbus_interface=INTERFACE_NAME,
                          in_signature='', out_signature='a{si}')
     def getAllDeviceStates(self):
         return self.device_states
-
 
     @dbus.service.signal(dbus_interface=INTERFACE_NAME,
                          signature='(si)')
