@@ -13,7 +13,6 @@ if [ "$PREFIX" = "/usr" ] && [ "$(id -u)" != "0" ]; then
 fi
 
 BASEDIR=$(dirname "$0")
-SITE_PACKAGES=$(python -c "from distutils.sysconfig import get_python_lib; print(get_python_lib())")
 
 echo -n "Installing Gnome Shell extension..."
 SHELL_EXTENSION_DIR=${PREFIX}/usr/share/gnome-shell/extensions/webcam-access-monitor@philipp.wolfer.co
@@ -22,6 +21,7 @@ install "${BASEDIR}"/gnome-shell-extension/*.{js,json,css} "${SHELL_EXTENSION_DI
 echo " done."
 
 echo -n "Installing Python modules..."
+SITE_PACKAGES=$(python -c "from distutils.sysconfig import get_python_lib; print(get_python_lib())")
 PYTHON_MODULE_DIR=${PREFIX}${SITE_PACKAGES}/webcamaccessmonitor
 install -d "${PYTHON_MODULE_DIR}"
 install "${BASEDIR}"/service/webcamaccessmonitor/*.py "${PYTHON_MODULE_DIR}"
