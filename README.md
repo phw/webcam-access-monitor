@@ -14,6 +14,7 @@ Using a D-Bus service makes it easy to extend this application to support
 more desktop environments, such as the Unity desktop using an indicator applet
 or good old notification applets.
 
+
 Requirements
 ------------
 
@@ -23,9 +24,17 @@ Requirements
 * PyGObject
 * PSmisc
 
+
 Installation and usage
 ----------------------
-For now there is no install script and you have to copy the individual
-components into place manually. Have a look at the Arch Linux
-[AUR package](https://aur.archlinux.org/packages/webcam-access-monitor/) [PKGBUILD](https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=webcam-access-monitor)
-for an example. I will eventually add a proper install script and better instructions.
+A basic install script is included, that will install all the files to the
+appropriate places in `/usr/`. Just run it as:
+
+  ./install.sh
+
+To uninstall again run:
+
+  ./uninstall.sh
+
+For Arch Linux you can also install using the
+[AUR package](https://aur.archlinux.org/packages/webcam-access-monitor/).
