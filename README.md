@@ -30,11 +30,11 @@ Installation and usage
 A basic install script is included, that will install all the files to the
 appropriate places in `/usr/`. Just run it as:
 
-  ./install.sh
+    ./install.sh
 
 To uninstall again run:
 
-  ./uninstall.sh
+    ./uninstall.sh
 
 For Arch Linux you can also install using the
 [AUR package](https://aur.archlinux.org/packages/webcam-access-monitor/).
