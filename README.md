@@ -1,5 +1,7 @@
 Webcam Access Monitor
 =====================
+[![GitHub release](https://img.shields.io/github/release/phw/webcam-access-monitor.svg)](https://github.com/phw/webcam-access-monitor/releases)
+[![License: GPL v3+](https://img.shields.io/badge/license-GPL%20v3%2B-blue.svg)](http://www.gnu.org/licenses/gpl-3.0)
 [![Code Climate](https://codeclimate.com/github/phw/webcam-access-monitor/badges/gpa.svg)](https://codeclimate.com/github/phw/webcam-access-monitor)
 
 The Webcam Access Monitor helps you to see whether your webcam is currently
