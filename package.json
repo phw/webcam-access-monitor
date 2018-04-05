@@ -23,5 +23,8 @@
   "bugs": {
     "url": "https://github.com/phw/webcam-access-monitor/issues"
   },
-  "homepage": "https://github.com/phw/webcam-access-monitor#readme"
+  "homepage": "https://github.com/phw/webcam-access-monitor#readme",
+  "scripts": {
+    "lint": "eslint 'gnome-shell-extension/**/*.js' && flake8 service/*.py service/*/*.py"
+  }
 }

@@ -20,7 +20,8 @@ if __name__ == '__main__':
     import dbus
     from gi.repository import GObject
     from dbus.mainloop.glib import DBusGMainLoop
-    from webcamaccessmonitor.dbus import WebcamStatusService, BUS_NAME, OBJECT_PATH
+    from webcamaccessmonitor.dbus import (WebcamStatusService,
+                                          BUS_NAME, OBJECT_PATH)
     from webcamaccessmonitor.webcammonitor import WebcamMonitor
 
     loop = GObject.MainLoop()
