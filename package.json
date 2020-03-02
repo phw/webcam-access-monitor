@@ -1,6 +1,6 @@
 {
   "name": "webcam-access-monitor",
-  "version": "0.2.3",
+  "version": "0.2.4",
   "description": "Gnome Shell extension to Display an icon in the top bar whenever the webcam is in use.",
   "devDependencies": {
     "eslint": "^6.8.0",
