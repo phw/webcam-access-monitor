@@ -86,7 +86,7 @@ const CameraStatusButton = new Lang.Class({
       Lang.bind(this, (result, excp) => {
         [result] = result
         let status = true
-        for (let device in result) {
+        for (const device in result) {
           log('DEBUG: Camera device ' + device + ' state ' + result[device])
           status &= result[device] === 1
         }
